@@ -1,0 +1,45 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+
+# Step 1: Load the Data
+file_path = r"D:\anudeep foundation\smartphone_reviews.csv"
+df = pd.read_csv(file_path)
+
+# Step 2: Data Exploration
+print("🔹 Dataset Overview:")
+print(df.head())
+
+print("\n🔹 Data Description:")
+print(df.describe())
+
+print("\n🔹 Missing Values:")
+print(df.isnull().sum())
+
+# ✅ Check Available Columns Before Proceeding
+print("\n🔹 Available Columns in Dataset:")
+print(df.columns)
+
+# Step 3: Data Cleaning
+df.dropna(inplace=True)  # Remove missing values if any
+
+# Step 4: Data Visualization
+plt.style.use('ggplot')
+
+# 2️⃣ Word Cloud for Most Used Words in Reviews (If 'review_text' exists)
+if 'review_text' in df.columns:
+    text = " ".join(df['review_text'].astype(str))
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    plt.title("Most Common Words in Reviews")
+    plt.show()
+else:
+    print("⚠️ 'review_text' column not found, skipping word cloud generation.")
+
+# Step 5: Save Processed Data
+df.to_csv('processed_smartphone_reviews.csv', index=False)
+print("✅ Data Analysis Completed! Processed data saved.")
